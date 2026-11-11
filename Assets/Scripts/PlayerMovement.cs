@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
+    private Vector3 initialPos;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+
+        initialPos = transform.position;
+
     }
 
     // Update is called once per frame
@@ -50,10 +56,18 @@ public class PlayerMovement : MonoBehaviour
         //Has the Player look in the correct direction
         if (moveDir < 0) sprite.flipX = true;
         else if (moveDir > 0) sprite.flipX = false;
+
+        if (transform.position.y < -6.5f)
+        {
+            rb.linearVelocity = new Vector2(0, 0);
+            transform.position = initialPos;
+        }
     }
 
     private void FixedUpdate()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
+
+    
 }

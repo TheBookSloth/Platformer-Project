@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
+    public float knockbackForce = 4f;
     public float moveDir = 0;
 
     private Rigidbody2D rb;
@@ -13,9 +14,12 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer sprite;
 
     private bool isGrounded = false;
+    private bool gettingKnockback = false;
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
+
+    private float knockbackTimer = 0f;
 
     private Vector3 initialPos;
 
@@ -34,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //Interpret Inputs
         if (Input.GetKey(KeyCode.A)) moveDir = -1f;
         if (Input.GetKey(KeyCode.D)) moveDir = 1f;
@@ -41,7 +46,8 @@ public class PlayerMovement : MonoBehaviour
             moveDir = 0;
 
         //Move Player
-        rb.linearVelocity = new Vector2(moveDir * moveSpeed, rb.linearVelocity.y);
+        if (!gettingKnockback) rb.linearVelocity = new Vector2(moveDir * moveSpeed, rb.linearVelocity.y);
+        else knockbackTimer += 1 * Time.deltaTime;
 
         //Change Animator Variables for idle, walking, and jumping
         animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
@@ -66,7 +72,31 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        if (knockbackTimer >= 0.125f || knockbackTimer == 0f) isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        if (isGrounded) gettingKnockback = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Coin"))
+        {
+
+        }
+        else if (collision.gameObject.CompareTag("Enemy") && isGrounded)
+        {
+            gettingKnockback = true;
+            isGrounded = false;
+            knockbackTimer = 0.01f;
+            if (collision.transform.position.x < transform.position.x)
+            {
+                rb.linearVelocity = new Vector2(knockbackForce, knockbackForce);
+            }
+            else
+            {
+                rb.linearVelocity = new Vector2(-knockbackForce, knockbackForce);
+            }
+        }
     }
 
     

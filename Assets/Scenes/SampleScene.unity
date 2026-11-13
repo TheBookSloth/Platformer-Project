@@ -199,7 +199,7 @@ TilemapRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -2971,6 +2971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
   jumpForce: 10
+  knockbackForce: 7
   moveDir: 0
   groundCheck: {fileID: 668745300}
   groundCheckRadius: 0.2
@@ -3212,6 +3213,8 @@ MonoBehaviour:
   pointLeft: {fileID: 1784608252}
   pointRight: {fileID: 217908052}
   speed: 5
+  takingDamage: 0
+  isDead: 0
 --- !u!95 &714091050
 Animator:
   serializedVersion: 7
@@ -3268,7 +3271,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.010782719, y: 0.010782599}
+  m_Offset: {x: -0.0018057823, y: -0.32406074}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3278,7 +3281,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.65894413, y: 0.1521542}
+  m_Size: {x: 0.8754587, y: 0.84198177}
   m_EdgeRadius: 0
 --- !u!1 &1751648275
 GameObject:
